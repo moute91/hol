@@ -5,6 +5,20 @@
         stage('Hello') {
             steps {
                 echo 'Hello World'
+                sleep 5
+           
+         }  
+    }
+    stage('Hello') {
+            steps {
+                echo 'Hello World'
+                sleep 3
+            }
+           
+        }
+        stage('Hello') {
+            steps {
+                echo 'Hello World'
             }
         }
     }
