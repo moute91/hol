@@ -1,31 +1,35 @@
  pipeline {
     agent any
     tools {
-         maven 'M2_HOME'
-         }
-    stages {
-        stage('Hello') {
-            steps {
-                echo 'Hello World'
-                sleep 5
-    stage('build') {      
-       steps {
-          echo 'hello build'
-            sh 'mvn clean'
-            sh 'mvn install'
-            sh 'mvn clean'
+        maven 'M2_HOME'
     }
-    stage('Hello') {
+
+    stages {
+       
+      stage('build') {
             steps {
-                echo 'Hello World'
-                sleep 3
+                echo 'Hello build'
+                sh 'mvn clean'
+                sh  'mvn install'
+                sh 'mvn package'
             }
-           
         }
-        stage('Hello') {
+        stage('test') {
             steps {
-                echo 'Hello World'
+                sh 'mvn test'
+               
             }
         }
+        stage ('build and publish image') {
+      steps {
+        script {
+          checkout scm
+          docker.withRegistry('', 'dockerUserID') {
+          def customImage = docker.build("moute/devops-pipeline:${env.BUILD_ID}")
+          customImage.push()
+          }
+    }
+       
     }
 }
+
